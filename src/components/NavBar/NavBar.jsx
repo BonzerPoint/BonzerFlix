@@ -90,7 +90,7 @@ const NavBar = () => {
                 color="inherit"
                 onClick={fetchToken}
               >
-                Login11 &nbsp; <AccountCircle />
+                Login &nbsp; <AccountCircle />
               </Button>
             ) : (
               <Button
