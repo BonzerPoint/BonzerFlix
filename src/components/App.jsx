@@ -37,7 +37,6 @@ const App = () => {
             path="/approved"
             element={<Movies />}
           />
-
           <Route
             exact
             path="/profile/:id"
