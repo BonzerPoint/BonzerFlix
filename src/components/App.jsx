@@ -34,7 +34,6 @@ const App = () => {
             element={<Movies />}
           />
           <Route
-            exact
             path="/approved"
             element={<Movies />}
           />

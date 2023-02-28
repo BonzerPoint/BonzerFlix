@@ -10,6 +10,9 @@ import {
   useMediaQuery,
   Rating,
 } from '@mui/material';
+
+import Tooltip, { TooltipProps, tooltipClasses } from '@mui/material/Tooltip';
+
 import {
   Movie as MovieIcon,
   Theaters,
@@ -23,6 +26,7 @@ import {
 import { Link, useParams, useNavigate } from 'react-router-dom';
 import { useDispatch, useSelector } from 'react-redux';
 import axios from 'axios';
+import { fetchToken } from '../../utils';
 
 import {
   useGetMovieQuery,
@@ -33,11 +37,14 @@ import useStyles from './styles';
 import genreIcons from '../../assets/genres';
 import { selectGenreOrCategory } from '../../features/currentGenreOrCategory';
 import MovieList from '../MovieList/MovieList';
+import { setUser, userSelector } from '../../features/auth';
+import { styled } from '@mui/material/styles';
 
 const MovieInformation = () => {
-  const user = useSelector((state) => state.user);
+  // const user = useSelector((state) => state.user);
   const classes = useStyles();
   const { id } = useParams();
+  const { isAuthenticated, user } = useSelector(userSelector);
 
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -135,6 +142,22 @@ const MovieInformation = () => {
       </Box>
     );
   }
+
+  const HtmlTooltip = styled(({ className, ...props }: TooltipProps) => (
+    <Tooltip
+      {...props}
+      classes={{ popper: className }}
+    />
+  ))(({ theme }) => ({
+    [`& .${tooltipClasses.tooltip}`]: {
+      backgroundColor: '#f5f5f9',
+      color: 'rgba(0, 0, 0, 0.87)',
+      maxWidth: 220,
+      fontSize: theme.typography.pxToRem(12),
+      border: '1px solid #dadde9',
+    },
+  }));
+
   return (
     <Grid
       container
@@ -329,20 +352,60 @@ const MovieInformation = () => {
                 size="medium"
                 variant="outlined"
               >
-                <Button
-                  onClick={addToFavorites}
-                  endIcon={
-                    isMovieFavorited ? <FavoriteBorderOutlined /> : <Favorite />
+                <HtmlTooltip
+                  title={
+                    !isAuthenticated && (
+                      <React.Fragment>
+                        <Typography color="inherit">
+                          <Button onClick={fetchToken}>
+                            Login First to Add to Favorite
+                          </Button>
+                        </Typography>
+                      </React.Fragment>
+                    )
                   }
                 >
-                  {isMovieFavorited ? 'Unfavorite' : 'Favorite'}
-                </Button>
-                <Button
-                  onClick={addToWatchlist}
-                  endIcon={isMovieWatchlisted ? <Remove /> : <PlusOne />}
+                  <span>
+                    <Button
+                      disabled={!isAuthenticated ? true : false}
+                      onClick={addToFavorites}
+                      endIcon={
+                        isMovieFavorited ? (
+                          <FavoriteBorderOutlined />
+                        ) : (
+                          <Favorite />
+                        )
+                      }
+                    >
+                      {isMovieFavorited ? 'Unfavorite' : 'Favorite'}
+                    </Button>
+                  </span>
+                </HtmlTooltip>
+
+                <HtmlTooltip
+                  title={
+                    !isAuthenticated && (
+                      <React.Fragment>
+                        <Typography color="inherit">
+                          <Button onClick={fetchToken}>
+                            Login First to Add to watchlist
+                          </Button>
+                        </Typography>
+                      </React.Fragment>
+                    )
+                  }
                 >
-                  Watchlist
-                </Button>
+                  <span>
+                    <Button
+                      disabled={!isAuthenticated ? true : false}
+                      onClick={addToWatchlist}
+                      endIcon={isMovieWatchlisted ? <Remove /> : <PlusOne />}
+                    >
+                      Watchlist
+                    </Button>
+                  </span>
+                </HtmlTooltip>
+
                 <Button
                   onClick={() => navigate(-1)}
                   endIcon=<ArrowBack />
