@@ -6,6 +6,7 @@ import useStyles from './styles';
 import useAlan from './Alan/Alan';
 
 import { Actors, MovieInformation, Movies, NavBar, Profile } from './index';
+import TopBar from './TopBar/TopBar';
 
 const App = () => {
   const classes = useStyles();
@@ -14,6 +15,7 @@ const App = () => {
   return (
     <div className={classes.root}>
       <CssBaseline />
+      <TopBar />
       <NavBar />
       <main className={classes.content}>
         <div className={classes.toolbar} />

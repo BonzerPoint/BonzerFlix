@@ -24,6 +24,7 @@ import { Search, Sidebar } from '..';
 import useStyles from './styles';
 import { fetchToken, moviesApi, createSessionId } from '../../utils';
 import { setUser, userSelector } from '../../features/auth';
+import TopBar from '../TopBar/TopBar';
 
 const NavBar = () => {
   const { isAuthenticated, user } = useSelector(userSelector);
@@ -63,6 +64,7 @@ const NavBar = () => {
     <>
       <AppBar position="fixed">
         <Toolbar className={classes.toolbar}>
+          <TopBar />
           {isMobile && (
             <IconButton
               color="inherit"
